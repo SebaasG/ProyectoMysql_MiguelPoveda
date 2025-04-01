@@ -188,6 +188,7 @@ CREATE TABLE areas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(45) NOT NULL,
     capacidad INT NOT NULL
+    estado VARCHAR (20) NOT NULL
 );
 
 CREATE TABLE grupo (
