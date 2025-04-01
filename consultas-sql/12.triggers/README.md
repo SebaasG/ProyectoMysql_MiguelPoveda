@@ -1,4 +1,3 @@
-```md
 # 🔥 Triggers en SQL  
 
 ## 📂 Otras Categorías  
@@ -39,7 +38,7 @@ DELIMITER //
 
 ### 2️⃣ Al actualizar la nota final de un módulo, verificar si el camper aprueba o reprueba  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER verificar_aprobacion
     AFTER UPDATE ON skillCamper
     FOR EACH ROW
@@ -54,36 +53,36 @@ DELIMITER //
             WHERE id = NEW.id;
         END IF;
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
 
 ### 3️⃣ Al insertar una inscripción, cambiar el estado del camper a "Inscrito"  
 ```sql  
 DELIMITER //
-CREATE TRIGGER cambiar_estado_inscrito
-AFTER INSERT ON inscripciones
-FOR EACH ROW
-BEGIN
-    DECLARE id_estado_inscrito INT;
-    
-    -- Obtenemos el ID del estado "Inscrito"
-    SELECT id INTO id_estado_inscrito FROM estados WHERE estado = 'Inscrito' LIMIT 1;
-    
-    -- Actualizamos el estado del camper
-    UPDATE datosCamper 
-    SET idEstado = id_estado_inscrito 
-    WHERE docCamper = NEW.docCamper;
-    
-    -- Registramos en el historial de estados
-    INSERT INTO historialEstados (docCamper, idEstado, fechaCambio)
-    VALUES (NEW.docCamper, id_estado_inscrito, CURDATE());
-END//
+    CREATE TRIGGER cambiar_estado_inscrito
+    AFTER INSERT ON inscripciones
+    FOR EACH ROW
+    BEGIN
+        DECLARE id_estado_inscrito INT;
+        
+        -- Obtenemos el ID del estado "Inscrito"
+        SELECT id INTO id_estado_inscrito FROM estados WHERE estado = 'Inscrito' LIMIT 1;
+        
+        -- Actualizamos el estado del camper
+        UPDATE datosCamper 
+        SET idEstado = id_estado_inscrito 
+        WHERE docCamper = NEW.docCamper;
+        
+        -- Registramos en el historial de estados
+        INSERT INTO historialEstados (docCamper, idEstado, fechaCambio)
+        VALUES (NEW.docCamper, id_estado_inscrito, CURDATE());
+    END//
 DELIMITER ;
 ```  
 
 ### 4️⃣ Al actualizar una evaluación, recalcular su promedio inmediatamente  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER recalcular_promedio
     AFTER UPDATE ON evaluaciones
     FOR EACH ROW
@@ -95,7 +94,7 @@ DELIMITER ;
         SET calificacion = nota_final 
         WHERE idSkill = NEW.idSkill AND docCamper = NEW.docCamper;
     END//
-    DELIMITER ; 
+DELIMITER ; 
 ```  
 
 ### 5️⃣ Al eliminar una inscripción, marcar al camper como “Retirado”  
@@ -119,7 +118,7 @@ DELIMITER //
         INSERT INTO historialEstados (docCamper, idEstado, fechaCambio)
         VALUES (OLD.docCamper, id_estado_retirado, CURDATE());
     END//
-    DELIMITER ; 
+DELIMITER ; 
 ```  
 
 ### 6️⃣ Al insertar un nuevo módulo, registrar automáticamente su SGDB asociado  
@@ -145,7 +144,7 @@ DELIMITER ;
 
 ### 7️⃣ Al insertar un nuevo trainer, verificar duplicados por identificación  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER verificar_duplicado_trainer
     BEFORE INSERT ON trainer
     FOR EACH ROW
@@ -159,12 +158,12 @@ DELIMITER ;
             SET MESSAGE_TEXT = 'Error: Ya existe un trainer con esta identificación';
         END IF;
     END//
-    DELIMITER ; 
+DELIMITER ; 
 ```  
 
 ### 8️⃣ Al asignar un área, validar que no exceda su capacidad  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER validar_capacidad_area
     BEFORE INSERT ON usoArea
     FOR EACH ROW
@@ -187,12 +186,12 @@ DELIMITER ;
             SET MESSAGE_TEXT = 'Error: La capacidad del área ha sido excedida para este horario';
         END IF;
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
 
 ### 9️⃣ Al insertar una evaluación con nota < 60, marcar al camper como “Bajo rendimiento”  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER marcar_bajo_rendimiento
     AFTER INSERT ON evaluaciones
     FOR EACH ROW
@@ -216,12 +215,12 @@ DELIMITER ;
             VALUES (NEW.docCamper, id_estado_bajo, CURDATE());
         END IF;
     END//
-    DELIMITER ; 
+DELIMITER ; 
 ```  
 
 ### 🔟 Al cambiar de estado a “Graduado”, mover registro a la tabla de egresados  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER mover_a_egresados
     AFTER UPDATE ON datosCamper
     FOR EACH ROW
@@ -244,12 +243,12 @@ DELIMITER ;
             VALUES (NEW.docCamper, ruta_camper, CURDATE());
         END IF;
     END//
-    DELIMITER ; 
+DELIMITER ; 
 ```  
 
 ### 1️⃣1️⃣ Al modificar horarios de trainer, verificar solapamiento con otros  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER verificar_solapamiento_horarios
     BEFORE UPDATE ON usoArea
     FOR EACH ROW
@@ -269,12 +268,12 @@ DELIMITER ;
             SET MESSAGE_TEXT = 'Error: El trainer ya tiene asignado este horario';
         END IF;
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
 
 ### 1️⃣2️⃣ Al eliminar un trainer, liberar sus horarios y rutas asignadas  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER liberar_asignaciones_trainer
     BEFORE DELETE ON trainer
     FOR EACH ROW
@@ -288,12 +287,12 @@ DELIMITER ;
         -- Eliminamos los teléfonos asociados
         DELETE FROM trainerTelefonos WHERE docTrainer = OLD.doc;
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
 
 ### 1️⃣3️⃣ Al cambiar la ruta de un camper, actualizar automáticamente sus módulos  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER actualizar_modulos_camper
     AFTER UPDATE ON inscripciones
     FOR EACH ROW
@@ -312,12 +311,12 @@ DELIMITER ;
             WHERE idRuta = NEW.idRuta;
         END IF;
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
 
 ### 1️⃣4️⃣ Al insertar un nuevo camper, verificar si ya existe por número de documento  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER verificar_duplicado_camper
     BEFORE INSERT ON camper
     FOR EACH ROW
@@ -331,12 +330,12 @@ DELIMITER ;
             SET MESSAGE_TEXT = 'Error: Ya existe un camper con esta identificación';
         END IF;
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
 
 ### 1️⃣5️⃣ Al actualizar la nota final, recalcular el estado del módulo automáticamente  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER actualizar_estado_modulo
     AFTER UPDATE ON skillCamper
     FOR EACH ROW
@@ -353,12 +352,12 @@ DELIMITER ;
             END IF;
         END IF;
     END//
-    DELIMITER ;  
+DELIMITER ;  
 ```  
 
 ### 1️⃣6️⃣ Al asignar un módulo, verificar que el trainer tenga ese conocimiento  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER verificar_conocimiento_trainer
     BEFORE INSERT ON usoArea
     FOR EACH ROW
@@ -380,12 +379,12 @@ DELIMITER ;
             SET MESSAGE_TEXT = 'Error: El trainer no tiene conocimiento de esta ruta';
         END IF;
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
 
 ### 1️⃣7️⃣ Al cambiar el estado de un área a inactiva, liberar campers asignados  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER liberar_campers_area_inactiva
     AFTER UPDATE ON areas
     FOR EACH ROW
@@ -406,12 +405,12 @@ DELIMITER ;
             );
         END IF;
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
 
 ### 1️⃣8️⃣ Al crear una nueva ruta, clonar la plantilla base de módulos y SGDBs  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER clonar_plantilla_ruta
     AFTER INSERT ON rutas
     FOR EACH ROW
@@ -442,12 +441,12 @@ DELIMITER ;
             CURDATE()
         );
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
 
 ### 1️⃣9️⃣ Al registrar la nota práctica, verificar que no supere 60% del total  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER verificar_porcentaje_practica
     BEFORE INSERT ON evaluaciones
     FOR EACH ROW
@@ -458,12 +457,12 @@ DELIMITER ;
             SET MESSAGE_TEXT = 'Error: La nota práctica no puede superar el 60% (60 puntos)';
         END IF;
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
 
 ### 2️⃣0️⃣ Al modificar una ruta, notificar cambios a los trainers asignados  
 ```sql  
-    DELIMITER //
+DELIMITER //
     CREATE TRIGGER notificar_cambios_ruta
     AFTER UPDATE ON rutas
     FOR EACH ROW
@@ -478,6 +477,6 @@ DELIMITER ;
         
 
     END//
-    DELIMITER ;
+DELIMITER ;
 ```  
-```  
+
