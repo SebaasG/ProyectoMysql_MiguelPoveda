@@ -1,0 +1,11 @@
+
+## 📜 Descripción de Archivos
+
+### `01_obtener_campers_inscritos.sql`
+Consulta para obtener todos los campers inscritos en la base de datos.
+
+```sql
+SELECT id_camper, nombre, apellido, fecha_inscripcion, estado
+FROM campers
+WHERE estado = 'inscrito'
+ORDER BY fecha_inscripcion DESC;
