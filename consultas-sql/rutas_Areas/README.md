@@ -1,9 +1,3 @@
-# 📊 Consultas SQL  
-
-Este repositorio contiene un conjunto de 100 consultas SQL organizadas en diferentes categorías para analizar y gestionar la información de campers, rutas, trainers y evaluaciones.  
-
-
-
 ---
 
 ## 📂 Categorías  
@@ -19,4 +13,3 @@ Este repositorio contiene un conjunto de 100 consultas SQL organizadas en difere
 
 
 ---
-
