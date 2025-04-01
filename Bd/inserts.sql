@@ -86,6 +86,7 @@ VALUES
 INSERT INTO datosCamper (docCamper, docAcu, idEstado, direccion, idNivel, idSede)
 VALUES
 ('100011', '1001001001', 1, 'Calle 123 #45-67', 3, 1),
+('100012', '1001001010', 4, 'Avenida 45 #67-89', 2, 1),
 ('100013', '1001001002', 2, 'Carrera 12 #34-56', 2, 2),
 ('100014', '1001001003', 3, 'Avenida 89 #23-45', 1, 3),
 ('100015', '1001001004', 4, 'Calle 50 #10-20', 3, 1),
@@ -104,8 +105,27 @@ VALUES
 ('100014', 1, '2024-01-18'),
 ('100015', 2, '2024-01-19'),
 ('100016', 3, '2024-01-20'),
-('100017', 1, '2024-01-21');
+('100017', 1, '2024-01-21'),
+('100013', 2, '2024-01-17'),
+('100014', 1, '2024-01-18'),
+('100015', 1, '2024-01-19');
 
+INSERT INTO trainer (doc, nombres, apellidos)
+VALUES
+('2001234567', 'Juan', 'Pérez'),
+('2001234568', 'Laura', 'Gómez'),
+('2001234569', 'Carlos', 'Rodríguez'),
+('2001234570', 'Ana', 'Martínez'),
+('2001234571', 'Miguel', 'López'),
+('2001234572', 'Sofía', 'Hernández'),
+('2001234573', 'Diego', 'Torres'),
+('2001234574', 'Valentina', 'Ramírez'),
+('2001234575', 'Andrés', 'Castro'),
+('2001234576', 'Carolina', 'Díaz'),
+('2001234577', 'Eduardo', 'Vargas'),
+('2001234578', 'Natalia', 'Morales'),
+('2001234579', 'Roberto', 'Jiménez'),
+('2001234580', 'María', 'Sánchez');
 
 -- Insertar datos en la tabla telefonos
 INSERT INTO telefonos (numero) VALUES
@@ -158,7 +178,6 @@ INSERT INTO camperTelefonos (docCamper, idTelefono) VALUES
 ('100020', 14);
 SELECT * FROM datosCamper;
 
-select * from camperTelefonos;
 INSERT INTO datosTrainer (docTrainer, direccion) VALUES
 ('2001234567', 'Calle 101 #45-67'),
 ('2001234568', 'Avenida Central #23-45'),
@@ -304,7 +323,6 @@ INSERT INTO rutasTrainer (docTrainer, idRuta) VALUES
 ('2001234570', 2),
 ('2001234570', 4);
 
--- MÓDULOS Y NOTAS DE CAMPERS
 -- Insertar datos en la tabla skillCamper
 INSERT INTO skillCamper (idSkill, docCamper, estado, calificacion) VALUES
 (1, '100011', 'Aprobado', 85),
@@ -320,33 +338,31 @@ INSERT INTO skillCamper (idSkill, docCamper, estado, calificacion) VALUES
 (11, '100014', 'En curso', NULL),
 (13, '100015', 'Aprobado', 90),
 (14, '100015', 'Aprobado', 85),
-(15, '100015', 'En curso', NULL),
-(16, '100015', 'Pendiente', NULL);
+(15, '100015', 'En curso', NULL);
 
 -- ÁREAS DE ENTRENAMIENTO
-INSERT INTO areas (nombre, capacidad) VALUES
-('Apolo 11', 33),
-('Sputnik', 33),
-('Artemis', 33);
+INSERT INTO areas (nombre, capacidad, estado) VALUES
+('Apolo 11', 33, 'Disponible'),
+('Sputnik', 33, 'Disponible'),
+('Artemis', 2, 'Disponible');
 
 INSERT INTO grupo (idRuta, nombre, fechaInicio) VALUES
 (1, 'J1', '2024-01-15'),
 (2, 'J2', '2024-01-22'),
 (3, 'M1', '2024-01-29'),
-(4, 'M2', '2024-02');
+(4, 'M2', '2024-02-05');
 
--- USO DE ÁREAS
 INSERT INTO usoArea (idArea, idHorario, docTrainer, idGrupo, fechaUso) VALUES
-(1, 1, '123456789012', 1, '2024-01-15'),
-(2, 2, '987654321012', 2, '2024-01-22'),
-(3, 3, '456123789012', 3, '2024-01-29'),
-(1, 4, '321654987012', 4, '2024-02-05'),
-(2, 1, '654987321012', 1, '2024-02-12'),
-(3, 2, '789123456012', 2, '2024-02-19'),
-(1, 3, '987321654012', 3, '2024-02-26'),
-(2, 4, '456789123012', 4, '2024-01-18'),
-(3, 1, '321789654012', 1, '2024-01-25'),
-(1, 2, '159357852963', 2, '2024-02-01');
+(1, 1, '2001234567', 1, '2024-01-15'),
+(2, 2, '2001234568', 2, '2024-01-22'),
+(3, 3, '2001234569', 3, '2024-01-29'),
+(1, 4, '2001234570', 4, '2024-02-05'),
+(2, 1, '2001234571', 1, '2024-02-12'),
+(3, 2, '2001234572', 2, '2024-02-19'),
+(1, 3, '2001234573', 3, '2024-02-26'),
+(2, 4, '2001234574', 4, '2024-01-18'),
+(3, 1, '2001234575', 1, '2024-01-25'),
+(1, 2, '2001234576', 2, '2024-02-01');
 
 
 -- NOTIFICACIONES
@@ -392,32 +408,15 @@ INSERT INTO grupoCamper (idGrupo, docCamper) VALUES
 (2, '100020');
 
 
-INSERT INTO datosTrainer (docTrainer, direccion) VALUES 
-('2001234567', 'Calle 101 #45-67'),
-('2001234568', 'Avenida Central #23-45'),
-('2001234569', 'Carrera 12 #56-78'),
-('2001234570', 'Diagonal 90 #33-12'),
-('2001234571', 'Transversal 5 #89-11'),
-('2001234572', 'Calle 60 #40-22'),
-('2001234573', 'Avenida del Sol #9-99'),
-('2001234574', 'Carrera 50 #78-30'),
-('2001234575', 'Calle 72 #11-25'),
-('2001234576', 'Diagonal 33 #5-60'),
-('2001234577', 'Transversal 7 #14-33'),
-('2001234578', 'Avenida Norte #66-77'),
-('2001234579', 'Carrera 88 #21-44'),
-('2001234580', 'Calle 55 #32-90');
-
 -- EVALUACIONES
 INSERT INTO evaluaciones (idSkill, docCamper, proyecto, examen, actividades) VALUES 
-(1, '100011', 4.5, 4.8, 4.7),
-(2, '100012', 4.2, 4.0, 4.3),
-(3, '100013', 4.7, 4.6, 4.8),
-(4, '100014', 3.9, 4.1, 4.2),
-(5, '100015', 4.8, 4.9, 5.0),
-(6, '100016', 4.1, 4.2, 4.3),
-(7, '100017', 4.6, 4.4, 4.5),
-(8, '100018', 4.3, 4.5, 4.4),
-(9, '100019', 3.8, 4.0, 4.1),
-(10, '100020', 4.9, 5.0, 4.8);
-
+(1, '100011', 90, 96, 94),
+(2, '100012', 84, 80, 86),
+(3, '100013', 94, 92, 96),
+(4, '100014', 78, 82, 84),
+(5, '100015', 96, 98, 100),
+(6, '100016', 82, 84, 86),
+(7, '100017', 92, 88, 90),
+(8, '100018', 86, 90, 88),
+(9, '100019', 76, 80, 82),
+(10, '100020', 98, 100, 96);

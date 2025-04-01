@@ -14,66 +14,89 @@
 
 ### 1️⃣ Obtener todos los campers inscritos actualmente
 ```sql
-SELECT * FROM campers WHERE estado = 'Inscrito';
+SELECT c.doc, c.nombres, c.apellidos 
+FROM camper c
+JOIN inscripciones i ON c.doc = i.docCamper;
 ```
 
 ### 2️⃣ Listar los campers con estado "Aprobado"
 ```sql
-SELECT * FROM campers WHERE estado = 'Aprobado';
+SELECT c.doc, c.nombres, c.apellidos 
+FROM camper c
+JOIN datosCamper dc ON c.doc = dc.docCamper
+JOIN estados e ON dc.idEstado = e.id
+WHERE e.estado = 'Aprobado';
 ```
 
 ### 3️⃣ Mostrar los campers que ya están cursando alguna ruta
 ```sql
-SELECT c.* FROM campers c
-JOIN rutas r ON c.id_ruta = r.id
-WHERE r.estado = 'En curso';
+SELECT c.doc, c.nombres, c.apellidos, r.nombre AS ruta 
+FROM camper c
+JOIN inscripciones i ON c.doc = i.docCamper
+JOIN rutas r ON i.idRuta = r.id;
 ```
 
 ### 4️⃣ Consultar los campers graduados por cada ruta
 ```sql
-SELECT r.nombre AS ruta, COUNT(c.id) AS total_graduados
-FROM campers c
-JOIN rutas r ON c.id_ruta = r.id
-WHERE c.estado = 'Graduado'
-GROUP BY r.nombre;
+SELECT c.nombres, c.apellidos, e.idRuta, r.nombre AS ruta, COUNT(e.docCamper) AS total_graduados 
+FROM egresados e
+JOIN rutas r ON e.idRuta = r.id
+INNER JOIN camper c on e.docCamper = c.doc
+GROUP BY e.idRuta, c.nombres, c.apellidos;
 ```
 
 ### 5️⃣ Obtener los campers en estado "Expulsado" o "Retirado"
 ```sql
-SELECT * FROM campers WHERE estado IN ('Expulsado', 'Retirado');
+SELECT c.doc, c.nombres, c.apellidos, e.estado
+FROM camper c
+JOIN datosCamper dc ON c.doc = dc.docCamper
+JOIN estados e ON dc.idEstado = e.id
+WHERE e.estado IN ('Expulsado', 'Retirado');
 ```
 
 ### 6️⃣ Listar campers con nivel de riesgo “Alto”
 ```sql
-SELECT * FROM campers WHERE nivel_riesgo = 'Alto';
+SELECT c.doc, c.nombres, c.apellidos, nr.nivel
+FROM camper c
+JOIN datosCamper dc ON c.doc = dc.docCamper
+JOIN nivelRiesgo nr ON dc.idNivel = nr.id
+WHERE nr.nivel = 'Alto';
 ```
 
 ### 7️⃣ Mostrar el total de campers por cada nivel de riesgo
 ```sql
-SELECT nivel_riesgo, COUNT(*) AS total
-FROM campers
-GROUP BY nivel_riesgo;
+SELECT nr.nivel, COUNT(dc.docCamper) AS total_campers 
+FROM datosCamper dc
+JOIN nivelRiesgo nr ON dc.idNivel = nr.id
+GROUP BY nr.nivel;
 ```
 
 ### 8️⃣ Obtener campers con más de un número telefónico registrado
 ```sql
-SELECT c.id, c.nombre, COUNT(t.numero) AS total_telefonos
-FROM campers c
-JOIN telefonos t ON c.id = t.id_camper
-GROUP BY c.id, c.nombre
-HAVING COUNT(t.numero) > 1;
+SELECT c.doc, c.nombres, c.apellidos, COUNT(ct.idTelefono) AS total_telefonos
+FROM camper c
+JOIN camperTelefonos ct ON c.doc = ct.docCamper
+GROUP BY c.doc, c.nombres, c.apellidos
+HAVING COUNT(ct.idTelefono) > 1;
 ```
 
 ### 9️⃣ Listar los campers y sus respectivos acudientes y teléfonos
 ```sql
-SELECT c.nombre AS camper, a.nombre AS acudiente, t.numero AS telefono
-FROM campers c
-LEFT JOIN acudientes a ON c.id_acudiente = a.id
-LEFT JOIN telefonos t ON c.id = t.id_camper;
+SELECT c.doc, c.nombres, c.apellidos, 
+       a.nombre AS acudiente, a.telefono, 
+       t.numero AS telefono_campers
+FROM camper c
+JOIN datosCamper dc ON c.doc = dc.docCamper
+JOIN acudientes a ON dc.docAcu = a.doc
+LEFT JOIN camperTelefonos ct ON c.doc = ct.docCamper
+LEFT JOIN telefonos t ON ct.idTelefono = t.id;
 ```
 
 ### 🔟 Mostrar campers que aún no han sido asignados a una ruta
 ```sql
-SELECT * FROM campers WHERE id_ruta IS NULL;
+SELECT c.doc, c.nombres, c.apellidos 
+FROM camper c
+LEFT JOIN inscripciones i ON c.doc = i.docCamper
+WHERE i.idRuta IS NULL;
 ```
 

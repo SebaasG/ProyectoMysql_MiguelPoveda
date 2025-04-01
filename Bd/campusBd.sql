@@ -188,7 +188,7 @@ CREATE TABLE areas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(45) NOT NULL,
     capacidad INT NOT NULL,
-    estado VARCHAR (20) NOT NULL
+    estado  VARCHAR(20)  DEFAULT 'Disponible' NOT NULL
 );
 
 CREATE TABLE grupo (
@@ -266,5 +266,3 @@ actividades DOUBLE,
 FOREIGN KEY (idSkill) REFERENCES skills(id) ON DELETE CASCADE,
 FOREIGN KEY (docCamper) REFERENCES camper(doc) ON DELETE CASCADE
 ); 
-
-drop database CampusLands;

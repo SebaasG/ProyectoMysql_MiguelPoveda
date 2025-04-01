@@ -21,52 +21,113 @@
 
 ### 1️⃣ Obtener las notas teóricas, prácticas y quizzes de cada camper por módulo  
 ```sql  
--- Escribe aquí la consulta  
+SELECT docCamper, idSkill, proyecto AS notaPractica, examen AS notaTeorica, actividades AS notaQuizzes 
+FROM evaluaciones; 
 ```  
 
 ### 2️⃣ Calcular la nota final de cada camper por módulo  
 ```sql  
--- Escribe aquí la consulta  
+SELECT 
+    docCamper, 
+    idSkill, 
+    (proyecto * 0.6 + examen * 0.3 + actividades * 0.1) AS notaFinal
+FROM evaluaciones;  
 ```  
 
 ### 3️⃣ Mostrar los campers que reprobaron algún módulo (nota < 60)  
 ```sql  
--- Escribe aquí la consulta  
+SELECT 
+    e.docCamper, sk.nombre
+    idSkill, 
+    (e.proyecto * 0.6 + e.examen * 0.3 + e.actividades * 0.1) AS notaFinal
+FROM evaluaciones e
+INNER JOIN skills sk ON  e.idSkill = sk.id
+WHERE (proyecto * 0.6 + examen * 0.3 + actividades * 0.1) < 60;
 ```  
 
 ### 4️⃣ Listar los módulos con más campers en bajo rendimiento  
 ```sql  
--- Escribe aquí la consulta  
+SELECT 
+    e.idSkill, sk.nombre,
+    AVG(e.proyecto * 0.6 + e.examen * 0.3 + e.actividades * 0.1) AS promedioNotas
+FROM evaluaciones e
+INNER JOIN skills sk ON  e.idSkill = sk.id
+GROUP BY idSkill;
 ```  
 
 ### 5️⃣ Obtener el promedio de notas finales por cada módulo  
 ```sql  
--- Escribe aquí la consulta  
+SELECT 
+    idSkill, sk.nombre,
+    AVG(proyecto * 0.6 + examen * 0.3 + actividades * 0.1) AS promedioNotas
+FROM evaluaciones e
+INNER JOIN skills sk ON  e.idSkill = sk.id
+GROUP BY idSkill;
 ```  
 
 ### 6️⃣ Consultar el rendimiento general por ruta de entrenamiento  
 ```sql  
--- Escribe aquí la consulta  
+SELECT 
+    s.idRuta,  s.nombre,
+    AVG(e.proyecto * 0.6 + e.examen * 0.3 + e.actividades * 0.1) AS rendimientoGeneral
+FROM evaluaciones e
+JOIN skills s ON e.idSkill = s.id
+GROUP BY s.idRuta,s.nombre;
 ```  
 
 ### 7️⃣ Mostrar los trainers responsables de campers con bajo rendimiento  
 ```sql  
--- Escribe aquí la consulta  
+SELECT t.nombres, t.apellidos, r.nombre AS ruta, COUNT(e.docCamper) AS campers_reprobados
+FROM evaluaciones e
+JOIN skills s ON e.idSkill = s.id
+JOIN rutas r ON s.idRuta = r.id
+JOIN rutasTrainer rt ON r.id = rt.idRuta
+JOIN trainer t ON rt.docTrainer = t.doc
+WHERE (e.proyecto * 0.6 + e.examen * 0.3 + e.actividades * 0.1) < 60
+GROUP BY t.nombres, t.apellidos, r.nombre
+ORDER BY campers_reprobados DESC;
+
 ```  
 
 ### 8️⃣ Comparar el promedio de rendimiento por trainer  
 ```sql  
--- Escribe aquí la consulta  
+SELECT t.nombres, t.apellidos, r.nombre AS ruta,
+       AVG(e.proyecto * 0.6 + e.examen * 0.3 + e.actividades * 0.1) AS promedio_rendimiento
+FROM evaluaciones e
+JOIN skills s ON e.idSkill = s.id
+JOIN rutas r ON s.idRuta = r.id
+JOIN rutasTrainer rt ON r.id = rt.idRuta
+JOIN trainer t ON rt.docTrainer = t.doc
+GROUP BY t.nombres, t.apellidos, r.nombre
+ORDER BY promedio_rendimiento DESC;
 ```  
 
 ### 9️⃣ Listar los mejores 5 campers por nota final en cada ruta  
 ```sql  
--- Escribe aquí la consulta  
+SELECT *
+FROM (
+    SELECT 
+        e.docCamper, 
+        s.idRuta, 
+        (e.proyecto * 0.6 + e.examen * 0.3 + e.actividades * 0.1) AS notaFinal,
+        RANK() OVER (PARTITION BY s.idRuta ORDER BY (e.proyecto * 0.6 + e.examen * 0.3 + e.actividades * 0.1) DESC) AS ranking
+    FROM evaluaciones e
+    JOIN skills s ON e.idSkill = s.id
+) AS ranked
+WHERE ranking <= 5;
 ```  
 
 ### 🔟 Mostrar cuántos campers pasaron cada módulo por ruta  
 ```sql  
--- Escribe aquí la consulta  
+SELECT 
+    s.idRuta, 
+    e.idSkill, 
+    COUNT(*) AS campersAprobados
+FROM evaluaciones e
+JOIN skills s ON e.idSkill = s.id
+WHERE (e.proyecto * 0.6 + e.examen * 0.3 + e.actividades * 0.1) >= 60
+GROUP BY s.idRuta, e.idSkill;
+
 ```  
 
 
