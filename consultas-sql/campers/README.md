@@ -1,7 +1,76 @@
-## 1. Obtener la lista de todos los pedidos con los nombres de clientes usando INNER JOIN
+Aquí tienes el `README.md` con todas las consultas dentro, usando formato SQL para que se vea correctamente en GitHub:  
 
+```md
+# 📂 Consultas SQL - Campers
+
+Este archivo contiene consultas SQL para gestionar y analizar la información de los campers en la base de datos.
+
+## 📋 Lista de Consultas
+
+### 1️⃣ Obtener todos los campers inscritos actualmente
 ```sql
-SELECT p.id AS PedidoID, c.nombre AS ClienteNombre
-FROM Pedidos p
-INNER JOIN Clientes c ON p.cliente_id = c.id;
+SELECT * FROM campers WHERE estado = 'Inscrito';
 ```
+
+### 2️⃣ Listar los campers con estado "Aprobado"
+```sql
+SELECT * FROM campers WHERE estado = 'Aprobado';
+```
+
+### 3️⃣ Mostrar los campers que ya están cursando alguna ruta
+```sql
+SELECT c.* FROM campers c
+JOIN rutas r ON c.id_ruta = r.id
+WHERE r.estado = 'En curso';
+```
+
+### 4️⃣ Consultar los campers graduados por cada ruta
+```sql
+SELECT r.nombre AS ruta, COUNT(c.id) AS total_graduados
+FROM campers c
+JOIN rutas r ON c.id_ruta = r.id
+WHERE c.estado = 'Graduado'
+GROUP BY r.nombre;
+```
+
+### 5️⃣ Obtener los campers en estado "Expulsado" o "Retirado"
+```sql
+SELECT * FROM campers WHERE estado IN ('Expulsado', 'Retirado');
+```
+
+### 6️⃣ Listar campers con nivel de riesgo “Alto”
+```sql
+SELECT * FROM campers WHERE nivel_riesgo = 'Alto';
+```
+
+### 7️⃣ Mostrar el total de campers por cada nivel de riesgo
+```sql
+SELECT nivel_riesgo, COUNT(*) AS total
+FROM campers
+GROUP BY nivel_riesgo;
+```
+
+### 8️⃣ Obtener campers con más de un número telefónico registrado
+```sql
+SELECT c.id, c.nombre, COUNT(t.numero) AS total_telefonos
+FROM campers c
+JOIN telefonos t ON c.id = t.id_camper
+GROUP BY c.id, c.nombre
+HAVING COUNT(t.numero) > 1;
+```
+
+### 9️⃣ Listar los campers y sus respectivos acudientes y teléfonos
+```sql
+SELECT c.nombre AS camper, a.nombre AS acudiente, t.numero AS telefono
+FROM campers c
+LEFT JOIN acudientes a ON c.id_acudiente = a.id
+LEFT JOIN telefonos t ON c.id = t.id_camper;
+```
+
+### 🔟 Mostrar campers que aún no han sido asignados a una ruta
+```sql
+SELECT * FROM campers WHERE id_ruta IS NULL;
+```
+```
+
+Con este formato, GitHub lo renderizará correctamente, mostrando cada consulta con resaltado de sintaxis SQL.
