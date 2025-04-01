@@ -1,6 +1,3 @@
-# 📊 Consultas SQL  
-
-
 ## 📂 Categorías  
 
 📌 **Campers** → [Ver consultas](consultas-sql/1.campers/)  
@@ -13,5 +10,4 @@
 📌 **Joins Funciones** → [Ver consultas](consultas-sql/9.joins_Funciones/)  
 📌 **Procedimientos** → [Ver consultas](consultas-sql/10.procedimientos/)  
 📌 **Funciones** → [Ver consultas](consultas-sql/11.funciones/)  
-📌 **Triggers** → [Ver consultas](consultas-sql/12.triggers/)  
-
+📌 **Triggers** → [Ver consultas](consultas-sql/12.triggers/)   
