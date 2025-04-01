@@ -1,12 +1,3 @@
-Aquí tienes el `README.md` con todas las consultas dentro, usando formato SQL para que se vea correctamente en GitHub:  
-
-```md
-# 📂 Consultas SQL - Campers
-
-Este archivo contiene consultas SQL para gestionar y analizar la información de los campers en la base de datos.
-
-## 📋 Lista de Consultas
-
 ### 1️⃣ Obtener todos los campers inscritos actualmente
 ```sql
 SELECT * FROM campers WHERE estado = 'Inscrito';
@@ -71,6 +62,4 @@ LEFT JOIN telefonos t ON c.id = t.id_camper;
 ```sql
 SELECT * FROM campers WHERE id_ruta IS NULL;
 ```
-```
 
-Con este formato, GitHub lo renderizará correctamente, mostrando cada consulta con resaltado de sintaxis SQL.
